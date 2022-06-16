@@ -1,33 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import CartContext from "../../Context/cartContext";
 
 import classes from "./HeaderCartButton.module.css";
 import CartIcon from "../Cart/CartIcon";
+import Modal from "../UI/Modal/Modal";
 
-const HeaderCartButton = () => {
-  const [isHover, setIsHover] = useState(false);
+const HeaderCartButton = (props) => {
+  const [isItemAdded, setIsItemAdded] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const mouseEnterHandler = () => {
-    setIsHover(true);
+  const cartContextData = useContext(CartContext);
+
+  // -- NOTE: use this when form is submitted
+  const itemAddHandler = () => {
+    setIsItemAdded(true);
   };
 
-  const mouseLeaveHandler = () => {
-    setIsHover(false);
+  const openModalHandler = () => {
+    setShowModal(true);
+  };
+
+  const closeModalHandler = () => {
+    setShowModal(false);
   };
 
   return (
-    <button
-      className={`${classes.button} ${isHover && classes.bump}`}
-      onMouseEnter={mouseEnterHandler}
-      onMouseLeave={mouseLeaveHandler}
-    >
-      <span className={classes.icon}>
-        <CartIcon />
-      </span>
+    <>
+      {showModal && <Modal onCloseModal={closeModalHandler} />}
 
-      <span>Your Cart</span>
+      <button
+        className={`${classes.button} ${isItemAdded && classes.bump}`}
+        onClick={openModalHandler}
+      >
+        <span className={classes.icon}>
+          <CartIcon />
+        </span>
 
-      <span className={classes.badge}>2</span>
-    </button>
+        <span>Your Cart</span>
+
+        <span className={classes.badge}>{cartContextData.cartItemsAmount}</span>
+      </button>
+    </>
   );
 };
 

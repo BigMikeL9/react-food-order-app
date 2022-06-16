@@ -1,15 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Header from "./components/Layout/Header";
-import MealsSummary from "./components/Meal/MealsSummary";
-import AvailableMeals from "./components/Meal/AvailableMeals";
+import Meals from "./components/Meal/Meals";
 
 function App() {
   return (
     <>
       <Header />
-      <MealsSummary />
-      <AvailableMeals />
+      <Meals />
     </>
   );
 }

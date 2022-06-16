@@ -5,8 +5,6 @@ import mealsImage from "../Assets/meals.jpg";
 import classes from "./Header.module.css";
 
 const Header = () => {
-  console.log(classes);
-
   return (
     <>
       <header className={classes.header}>
