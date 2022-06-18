@@ -1,36 +1,40 @@
 import React, { useState, useEffect, useContext } from "react";
-import CartContext from "../../Context/cartContext";
 
 import classes from "./HeaderCartButton.module.css";
 import CartIcon from "../Cart/CartIcon";
-import Modal from "../UI/Modal/Modal";
+import CartContext from "../../store/CartContext";
 
 const HeaderCartButton = (props) => {
   const [isItemAdded, setIsItemAdded] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
+  //  NOTE: This component will be re-rendered whenever the context changes.
   const cartContextData = useContext(CartContext);
+  const { cartItems } = cartContextData;
 
-  // -- NOTE: use this when form is submitted
-  const itemAddHandler = () => {
+  const numberOfCartItems = cartItems.reduce((acc, item) => {
+    return acc + Number(item.amount);
+  }, 0);
+
+  // -- Button animation when order is submitted
+  // Debouncing
+  useEffect(() => {
+    if (!cartItems.length > 0) return;
     setIsItemAdded(true);
-  };
 
-  const openModalHandler = () => {
-    setShowModal(true);
-  };
+    const timer = setTimeout(() => setIsItemAdded(false), 300);
 
-  const closeModalHandler = () => {
-    setShowModal(false);
-  };
+    // Clean up function
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [cartItems]);
+  // --------------------
 
   return (
     <>
-      {showModal && <Modal onCloseModal={closeModalHandler} />}
-
       <button
         className={`${classes.button} ${isItemAdded && classes.bump}`}
-        onClick={openModalHandler}
+        onClick={props.onOpenCart}
       >
         <span className={classes.icon}>
           <CartIcon />
@@ -38,7 +42,7 @@ const HeaderCartButton = (props) => {
 
         <span>Your Cart</span>
 
-        <span className={classes.badge}>{cartContextData.cartItemsAmount}</span>
+        <span className={classes.badge}>{numberOfCartItems}</span>
       </button>
     </>
   );

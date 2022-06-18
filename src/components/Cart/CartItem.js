@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "../UI/Button/Button";
+import CartContext from "../../store/CartContext";
 
 import classes from "./CartItem.module.css";
 
 const CartItem = (props) => {
+  const cartContextData = useContext(CartContext);
+
   return (
     <li className={classes["cart-item"]}>
       <div>
@@ -15,7 +18,7 @@ const CartItem = (props) => {
       </div>
 
       <div className={classes.actions}>
-        <Button>-</Button>
+        <Button onClick={cartContextData.removeItem}>-</Button>
         <Button>+</Button>
       </div>
     </li>
