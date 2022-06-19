@@ -10,15 +10,17 @@ const MealItem = (props) => {
 
   const cartContextData = useContext(CartContext);
 
+  //  -- Get added meal amount from child component element 'MealItemForm.js'
   const addToCartHandler = (amount) => {
-    // Pass data to parent 'availableMeals.js'
-    const mealData = {
+    const newItemData = {
       id: props.id,
       name: props.name,
       price: props.price,
       amount: amount,
     };
-    cartContextData.addItem(mealData);
+
+    // -- Pass newItem data to Context
+    cartContextData.addItem(newItemData);
   };
 
   return (

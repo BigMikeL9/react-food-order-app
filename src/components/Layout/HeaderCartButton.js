@@ -21,9 +21,10 @@ const HeaderCartButton = (props) => {
     if (!cartItems.length > 0) return;
     setIsItemAdded(true);
 
-    const timer = setTimeout(() => setIsItemAdded(false), 300);
+    const timer = setTimeout(() => setIsItemAdded(false), 150);
 
     // Clean up function
+    // 🌟🌟 Good practice to cleanup any timers or any side-effects, that might be ongoing because we started them in useEffect
     return () => {
       clearTimeout(timer);
     };
@@ -33,7 +34,7 @@ const HeaderCartButton = (props) => {
   return (
     <>
       <button
-        className={`${classes.button} ${isItemAdded && classes.bump}`}
+        className={`${classes.button} ${isItemAdded ? classes.bump : ""}`}
         onClick={props.onOpenCart}
       >
         <span className={classes.icon}>

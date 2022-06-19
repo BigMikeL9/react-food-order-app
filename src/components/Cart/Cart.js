@@ -12,6 +12,18 @@ const Cart = (props) => {
   const { cartItems } = cartContextData;
   const { cartTotalCost } = cartContextData;
 
+  const cartHasItem = cartItems.length > 0;
+  const cartTotalCost_Fixed = ` $${cartTotalCost.toFixed(2)}`;
+
+  const onAddItemHandler = (newItem) => {
+    // -- Change the 'amount' property to '1' inorder to only add 1 when the plus is clicked
+    cartContextData.addItem({ ...newItem, amount: 1 });
+  };
+
+  const onRemoveItemHandler = (itemId) => {
+    cartContextData.removeItem(itemId);
+  };
+
   const cartList = cartItems.map((itemData) => {
     return (
       <CartItem
@@ -20,12 +32,15 @@ const Cart = (props) => {
         name={itemData.name}
         price={itemData.price}
         amount={itemData.amount}
+        onAdd={() => onAddItemHandler(itemData)}
+        onRemove={() => onRemoveItemHandler(itemData.id)}
       />
     );
   });
 
+  // -- 🟢 Do something with Submitted data
   const submitOrderHandler = () => {
-    console.log(`Order is on the way!! Total: $${cartTotalCost} 👍`);
+    console.log(`Order is on the way!! Total: ${cartTotalCost_Fixed} 👍`);
   };
 
   return (
@@ -34,16 +49,20 @@ const Cart = (props) => {
 
       <div className={classes.total}>
         <h3>Total Amount</h3>
-        <p>{`$${cartTotalCost}`}</p>
+        <p>{cartTotalCost_Fixed}</p>
       </div>
 
       <div className={classes.actions}>
         <Button className={classes["button--alt"]} onClick={props.onCloseCart}>
           Close
         </Button>
-        <Button className={classes.button} onClick={submitOrderHandler}>
-          Order
-        </Button>
+
+        {/* -- If cart has items -> render 'Order' button -- */}
+        {cartHasItem && (
+          <Button className={classes.button} onClick={submitOrderHandler}>
+            Order
+          </Button>
+        )}
       </div>
     </Modal>
   );

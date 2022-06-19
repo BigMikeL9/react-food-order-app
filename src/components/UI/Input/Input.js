@@ -1,20 +1,12 @@
-import React, { useRef, useImperativeHandle } from "react";
+import React from "react";
 
 import classes from "./Input.module.css";
 
 const Input = React.forwardRef((props, ref) => {
-  const inputRef = useRef();
-
-  useImperativeHandle(ref, () => {
-    return {
-      value: inputRef.current.value,
-    };
-  });
-
   return (
     <div className={classes.input}>
       <label htmlFor={props.inputProps.id}>{props.label}</label>
-      <input ref={inputRef} {...props.inputProps} />
+      <input ref={ref} {...props.inputProps} />
       {/* 'inputProps' is an Object. '{...props.inputProps}' is the same as 👇
 
                             <input
