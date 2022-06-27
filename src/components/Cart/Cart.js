@@ -3,6 +3,7 @@ import CartItem from "./CartItem";
 import Button from "../UI/Button/Button";
 import Modal from "../UI/Modal/Modal";
 import CartContext from "../../store/CartContext";
+import CheckoutForm from "./CheckoutForm";
 
 import classes from "./Cart.module.css";
 
@@ -39,8 +40,18 @@ const Cart = (props) => {
   });
 
   // -- 🟢 Do something with Submitted data
-  const submitOrderHandler = () => {
+  const submitOrderHandler = (buyerInfo) => {
     console.log(`Order is on the way!! Total: ${cartTotalCost_Fixed} 👍`);
+    console.log(buyerInfo);
+    console.log(cartContextData);
+
+    const order = {
+      orderItems: cartContextData.cartItems,
+      total: cartContextData.cartTotalCost,
+      buyerInfo,
+    };
+
+    console.log(order);
   };
 
   return (
@@ -52,16 +63,13 @@ const Cart = (props) => {
         <p>{cartTotalCost_Fixed}</p>
       </div>
 
-      <div className={classes.actions}>
-        <Button className={classes["button--alt"]} onClick={props.onCloseCart}>
-          Close
-        </Button>
-
-        {/* -- If cart has items -> render 'Order' button -- */}
+      <div>
+        {/* -- If cart has items -> render 'CheckoutForm' -- */}
         {cartHasItem && (
-          <Button className={classes.button} onClick={submitOrderHandler}>
-            Order
-          </Button>
+          <CheckoutForm
+            onCloseCart={props.onCloseCart}
+            onSubmitOrder={submitOrderHandler}
+          />
         )}
       </div>
     </Modal>

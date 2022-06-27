@@ -1,4 +1,12 @@
-.button {
+.error-container {
+  text-align: center;
+}
+.error-container p {
+  margin: 10px 0;
+  display: block;
+  color: inherit;
+}
+.error-container button {
   font: inherit;
   cursor: pointer;
   background-color: #8a2b06;
@@ -9,8 +17,8 @@
   font-weight: bold;
 }
 
-.button:hover,
-.button:active {
+.error-container button:hover,
+.error-container button:active {
   background-color: #641e03;
   border-color: #641e03;
 }
