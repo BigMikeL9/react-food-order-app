@@ -1,5 +1,6 @@
 import React from "react";
 import useInputValidation from "../../hooks/useInputValidation";
+import Spinner from "../UI/Spinner/Spinner";
 
 import classes from "./CheckoutForm.module.css";
 
@@ -48,7 +49,9 @@ const CheckoutForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (!formIsValid) return;
+    console.log(props.error !== null);
+    // if form is invalid or failed to send order to backend server
+    if (!formIsValid || props.error) return;
 
     nameReset();
     streetReset();
@@ -56,7 +59,7 @@ const CheckoutForm = (props) => {
     cityReset();
 
     // -- Submit Order
-    const buyerInfo = [name, street, postalCode, city];
+    const buyerInfo = { name, street, postalCode, city };
 
     props.onSubmitOrder(buyerInfo);
   };
@@ -132,9 +135,10 @@ const CheckoutForm = (props) => {
       </div>
 
       <div className={classes.actions}>
+        {props.error && <p>{`${props.error}. Please try again!`}</p>}
         <button type="button">Close</button>
         <button type="submit" className={classes.submit}>
-          Confirm
+          {props.isFetching ? <Spinner /> : "Confirm"}
         </button>
       </div>
     </form>
