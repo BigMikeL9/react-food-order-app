@@ -13,6 +13,7 @@ const AvailableMeals = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(false);
 
+  // =======================================
   const fetchMenuHandler = useCallback(async () => {
     setIsFetching(true);
     setError(null);
@@ -23,6 +24,7 @@ const AvailableMeals = () => {
       );
 
       if (!response.ok) {
+        // rest of code wont execute if this error is thrown
         throw new Error("Request Failed!");
       }
 
@@ -41,22 +43,24 @@ const AvailableMeals = () => {
       });
 
       console.log(transformedData);
-
       setMenu(transformedData);
     } catch (error) {
-      console.log(error.message);
       setError(error.message || "Something went Wrong!");
     }
 
     setIsFetching(false);
   }, []);
 
-  // ------------------------------------------------------------------------
+  // =======================================
   useEffect(() => {
     fetchMenuHandler();
   }, [fetchMenuHandler]);
 
-  // ------------------------------------------------------------------------
+  // =======================================
+  let content = <p>No items on Menu</p>;
+
+  if (isFetching) content = <Spinner />;
+
   const mealsList = menu.map((mealData) => {
     return (
       <MealItem
@@ -69,9 +73,6 @@ const AvailableMeals = () => {
     );
   });
 
-  // ------------------------------------------------------------------------
-  let content = <p>No items on Menu</p>;
-
   if (mealsList.length > 0) {
     content = <ul>{mealsList}</ul>;
   }
@@ -79,8 +80,7 @@ const AvailableMeals = () => {
   if (error)
     content = <Error errorMessage={error} fetchMenu={fetchMenuHandler} />;
 
-  if (isFetching) content = <Spinner />;
-  // ------------------------------------------------------------------------
+  // =======================================
 
   return <Card className={classes.meals}>{content}</Card>;
 };

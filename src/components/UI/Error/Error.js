@@ -5,7 +5,6 @@ import Button from "../Button/Button";
 import classes from "./Error.module.css";
 
 const Error = (props) => {
-  console.log(classes);
   const errorClasses = `${classes["error-container"]} ${props.className}`;
 
   return (

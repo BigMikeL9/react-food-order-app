@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import useInputValidation from "../../hooks/useInputValidation";
+import Spinner from "../UI/Spinner/Spinner";
 
 import classes from "./CheckoutForm.module.css";
 
 const CheckoutForm = (props) => {
+  const [hasError, seHasError] = useState(false);
+
   const {
     enteredValue: name,
     valueIsValid: nameIsValid,
@@ -29,7 +32,7 @@ const CheckoutForm = (props) => {
     inputChangeHandler: postalCodeChangeHandler,
     inputBlurHandler: postalCodeBlurHandler,
     reset: postalCodeReset,
-  } = useInputValidation((enteredValue) => enteredValue.trim().length >= 5);
+  } = useInputValidation((enteredValue) => enteredValue.trim().length === 5);
 
   const {
     enteredValue: city,
@@ -40,15 +43,22 @@ const CheckoutForm = (props) => {
     reset: cityReset,
   } = useInputValidation((enteredValue) => enteredValue.trim().length !== 0);
 
-  //   =======================================
+  // =======================================
   const formIsValid =
     nameIsValid && streetIsValid && postalCodeIsValid && cityIsValid;
 
-  //   =======================================
+  // =======================================
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (!formIsValid) return;
+    seHasError(false);
+
+    // -- if form is invalid or failed to send order to backend server
+    if (!formIsValid) {
+      seHasError(true);
+      return;
+    }
+    // if (props.error) return;
 
     nameReset();
     streetReset();
@@ -56,34 +66,33 @@ const CheckoutForm = (props) => {
     cityReset();
 
     // -- Submit Order
-    const user = [name, street, postalCode, city];
+    const userInfo = { name, street, postalCode, city };
 
-    props.onSubmitOrder(user);
+    props.onSubmitOrder(userInfo);
   };
 
-  //   =======================================
+  // =======================================
 
-  const nameClasses = nameHasError
-    ? `${classes.control} ${classes.invalid}`
-    : `${classes.control} `;
+  const nameControlClasses = `${classes.control} ${
+    nameHasError ? classes.invalid : ""
+  }`;
 
-  const streetClasses = streetHasError
-    ? `${classes.control} ${classes.invalid}`
-    : `${classes.control} `;
+  const streetControlClasses = `${classes.control} ${
+    streetHasError ? classes.invalid : ""
+  }`;
 
-  const postalCodeClasses = postalCodeHasError
-    ? `${classes.control} ${classes.invalid}`
-    : `${classes.control} `;
+  const postalCodeControlClasses = `${classes.control} ${
+    postalCodeHasError ? classes.invalid : ""
+  }`;
 
-  const cityClasses = cityCodeHasError
-    ? `${classes.control} ${classes.invalid}`
-    : `${classes.control} `;
-
+  const cityControlClasses = `${classes.control} ${
+    cityCodeHasError ? classes.invalid : ""
+  }`;
   //   =======================================
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
-      <div className={nameClasses}>
+      <div className={nameControlClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           type="text"
@@ -95,7 +104,7 @@ const CheckoutForm = (props) => {
         {nameHasError && <p>Please enter a valid Name!</p>}
       </div>
 
-      <div className={streetClasses}>
+      <div className={streetControlClasses}>
         <label htmlFor="street">Street</label>
         <input
           type="text"
@@ -107,19 +116,21 @@ const CheckoutForm = (props) => {
         {streetHasError && <p>Please enter a valid Street!</p>}
       </div>
 
-      <div className={postalCodeClasses}>
+      <div className={postalCodeControlClasses}>
         <label htmlFor="postal-code">Postal Code</label>
         <input
-          type="number"
+          type="text"
           id="postal-code"
           value={postalCode}
           onChange={postalCodeChangeHandler}
           onBlur={postalCodeBlurHandler}
         ></input>
-        {postalCodeHasError && <p>Please enter a valid Postal Code!</p>}
+        {postalCodeHasError && (
+          <p>Please enter a valid Postal Code (5 characters)!</p>
+        )}
       </div>
 
-      <div className={cityClasses}>
+      <div className={cityControlClasses}>
         <label htmlFor="city">City</label>
         <input
           type="text"
@@ -132,9 +143,14 @@ const CheckoutForm = (props) => {
       </div>
 
       <div className={classes.actions}>
-        <button type="button">Close</button>
+        {hasError && <p>{`Please try again Valid data!`}</p>}
+
+        <button type="button" onClick={props.onCloseCart}>
+          Close
+        </button>
+
         <button type="submit" className={classes.submit}>
-          Confirm
+          {props.isFetching ? <Spinner /> : "Confirm"}
         </button>
       </div>
     </form>
