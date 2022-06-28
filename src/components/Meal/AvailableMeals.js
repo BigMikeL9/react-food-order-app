@@ -23,7 +23,7 @@ const AvailableMeals = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        throw new Error("Request Failed!");
       }
 
       const data = await response.json();
@@ -45,7 +45,7 @@ const AvailableMeals = () => {
       setMenu(transformedData);
     } catch (error) {
       console.log(error.message);
-      setError(error.message);
+      setError(error.message || "Something went Wrong!");
     }
 
     setIsFetching(false);

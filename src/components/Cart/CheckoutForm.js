@@ -56,9 +56,9 @@ const CheckoutForm = (props) => {
     cityReset();
 
     // -- Submit Order
-    const buyerInfo = [name, street, postalCode, city];
+    const user = [name, street, postalCode, city];
 
-    props.onSubmitOrder(buyerInfo);
+    props.onSubmitOrder(user);
   };
 
   //   =======================================

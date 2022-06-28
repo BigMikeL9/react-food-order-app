@@ -40,15 +40,11 @@ const Cart = (props) => {
   });
 
   // -- 🟢 Do something with Submitted data
-  const submitOrderHandler = (buyerInfo) => {
-    console.log(`Order is on the way!! Total: ${cartTotalCost_Fixed} 👍`);
-    console.log(buyerInfo);
-    console.log(cartContextData);
-
+  const submitOrderHandler = (user) => {
     const order = {
       orderItems: cartContextData.cartItems,
       total: cartContextData.cartTotalCost,
-      buyerInfo,
+      user,
     };
 
     console.log(order);
