@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "works-627cf"
+  },
+  "targets": {
+    "works-627cf": {
+      "hosting": {
+        "fresco-app": [
+          "fresco-app"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

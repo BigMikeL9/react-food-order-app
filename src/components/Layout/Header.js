@@ -8,13 +8,13 @@ const Header = (props) => {
   return (
     <>
       <header className={classes.header}>
-        <h1>ReactMeals</h1>
+        <h1>Fresco</h1>
         <HeaderCartButton onOpenCart={props.onOpenCart} />
       </header>
 
-      <div className={classes["main-image"]}>
+      {/* <div className={classes["main-image"]}>
         <img src={mealsImage} alt="A table full of delicious food!"></img>
-      </div>
+      </div> */}
     </>
   );
 };
